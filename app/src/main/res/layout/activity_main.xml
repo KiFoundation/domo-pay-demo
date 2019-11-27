@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black"
+    tools:context=".DemoActivity">
+
+    <!-- Action bar -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- Toolbar -->
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/domo_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/domoBlue"
+            android:theme="@style/AppTheme.ActionBarTheme" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- Content -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <!-- Burgers -->
+        <LinearLayout
+            android:id="@+id/domo_layout_burger"
+            style="@style/Domo.ItemLine"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp" />
+
+            <TextView
+                style="@style/Domo.Text.Product"
+                android:text="@string/domo_product_burger" />
+
+            <EditText
+                android:id="@+id/domo_burger_text_quantity"
+                style="@style/Domo.EditText.Quantity" />
+
+            <EditText
+                android:id="@+id/domo_burger_text_price"
+                style="@style/Domo.EditText.Price" />
+
+            <TextView
+                android:id="@+id/domo_burger_text_total"
+                style="@style/Domo.Text.Total" />
+
+        </LinearLayout>
+
+        <!-- Frites -->
+        <LinearLayout
+            android:id="@+id/domo_layout_fries"
+            style="@style/Domo.ItemLine"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/domo_layout_burger">
+
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp" />
+
+            <TextView
+                style="@style/Domo.Text.Product"
+                android:text="@string/domo_product_fries" />
+
+            <EditText
+                android:id="@+id/domo_fries_text_quantity"
+                style="@style/Domo.EditText.Quantity" />
+
+            <EditText
+                android:id="@+id/domo_fries_text_price"
+                style="@style/Domo.EditText.Price" />
+
+            <TextView
+                android:id="@+id/domo_fries_text_total"
+                style="@style/Domo.Text.Total" />
+
+        </LinearLayout>
+
+        <!-- Cocas -->
+        <LinearLayout
+            android:id="@+id/domo_layout_coke"
+            style="@style/Domo.ItemLine"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/domo_layout_fries">
+
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp" />
+
+            <TextView
+                style="@style/Domo.Text.Product"
+                android:text="@string/domo_product_burger" />
+
+            <EditText
+                android:id="@+id/domo_coke_text_quantity"
+                style="@style/Domo.EditText.Quantity" />
+
+            <EditText
+                android:id="@+id/domo_coke_text_price"
+                style="@style/Domo.EditText.Price" />
+
+            <TextView
+                android:id="@+id/domo_coke_text_total"
+                style="@style/Domo.Text.Total" />
+
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/domo_text_total"
+            style="@style/Domo.Text"
+            android:text="@string/domo_total"
+            android:textSize="@dimen/domo_text_big_size"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/domo_layout_coke" />
+
+        <Button
+            android:id="@+id/domo_button_valid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/domo_basic_margin"
+            android:text="@string/action_valid"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/domo_text_total" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

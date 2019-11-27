@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="colorPrimary">@color/domoBlue</color>
+    <color name="colorPrimaryDark">@color/domoBlue</color>
+    <color name="colorAccent">@android:color/white</color>
+
+    <color name="domoBlue">#ff063beb</color>
+    <color name="domoBlue60">#99063beb</color>
+
+</resources>

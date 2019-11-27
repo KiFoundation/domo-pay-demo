@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Demo Domo Pay</string>
+
+    <string name="action_valid">Valider</string>
+
+    <string name="euro">€</string>
+    <string name="quantity">Quantity</string>
+
+    <string name="domo_price">%1$f €</string>
+    <string name="domo_product_burger">Burger</string>
+    <string name="domo_product_coke">Coca</string>
+    <string name="domo_product_fries">Frites</string>
+    <string name="domo_total">Total : %1$f €</string>
+
+</resources>

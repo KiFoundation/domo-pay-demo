@@ -1,0 +1,80 @@
+<resources>
+
+    <!-- Base application theme -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:colorPrimary">@color/colorPrimary</item>
+        <item name="android:colorAccent">@color/colorAccent</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:windowShowWallpaper">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
+    <style name="AppTheme.ActionBarTheme" parent="@style/ThemeOverlay.AppCompat.ActionBar">
+        <item name="colorControlNormal">@android:color/white</item>
+        <item name="android:textColorPrimary">@android:color/white</item>
+        <item name="android:textColorSecondary">@android:color/white</item>
+        <item name="android:itemBackground">@color/domoBlue</item>
+    </style>
+
+    <!-- Basic styles -->
+
+    <style name="Domo">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="Domo.Text">
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="Domo.EditText">
+        <item name="android:maxLines">1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">@android:color/white</item>
+        <item name="android:padding">@dimen/domo_small_padding</item>
+        <item name="android:layout_margin">@dimen/domo_small_margin</item>
+    </style>
+
+    <!-- Specific styles -->
+
+    <style name="Domo.ItemLine">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:gravity">center</item>
+        <item name="android:padding">@dimen/domo_basic_margin</item>
+    </style>
+
+    <style name="Domo.Text.Product">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">5</item>
+        <item name="android:textSize">@dimen/domo_text_main_size</item>
+    </style>
+
+    <style name="Domo.Text.Total">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:text">@string/euro</item>
+        <item name="android:textSize">@dimen/domo_text_main_size</item>
+    </style>
+
+    <style name="Domo.EditText.Quantity">
+        <item name="android:maxLength">2</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:hint">@string/quantity</item>
+        <item name="android:inputType">number</item>
+    </style>
+
+    <style name="Domo.EditText.Price">
+        <item name="android:maxLength">10</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:hint">@string/euro</item>
+        <item name="android:inputType">numberDecimal</item>
+    </style>
+
+</resources>
