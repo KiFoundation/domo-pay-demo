@@ -37,8 +37,9 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
-                android:layout_width="100dp"
-                android:layout_height="100dp" />
+                style="@style/Domo.ItemPicture"
+                android:contentDescription="@string/domo_product_burger"
+                android:src="@drawable/pic_burger" />
 
             <TextView
                 style="@style/Domo.Text.Product"
@@ -46,11 +47,13 @@
 
             <EditText
                 android:id="@+id/domo_burger_text_quantity"
-                style="@style/Domo.EditText.Quantity" />
+                style="@style/Domo.EditText.Quantity"
+                android:imeOptions="actionDone" />
 
             <EditText
                 android:id="@+id/domo_burger_text_price"
-                style="@style/Domo.EditText.Price" />
+                style="@style/Domo.EditText.Price"
+                android:imeOptions="actionDone" />
 
             <TextView
                 android:id="@+id/domo_burger_text_total"
@@ -67,8 +70,9 @@
             app:layout_constraintTop_toBottomOf="@id/domo_layout_burger">
 
             <ImageView
-                android:layout_width="100dp"
-                android:layout_height="100dp" />
+                style="@style/Domo.ItemPicture"
+                android:contentDescription="@string/domo_product_fries"
+                android:src="@drawable/pic_fries" />
 
             <TextView
                 style="@style/Domo.Text.Product"
@@ -97,12 +101,13 @@
             app:layout_constraintTop_toBottomOf="@id/domo_layout_fries">
 
             <ImageView
-                android:layout_width="100dp"
-                android:layout_height="100dp" />
+                style="@style/Domo.ItemPicture"
+                android:contentDescription="@string/domo_product_coke"
+                android:src="@drawable/pic_coke" />
 
             <TextView
                 style="@style/Domo.Text.Product"
-                android:text="@string/domo_product_burger" />
+                android:text="@string/domo_product_coke" />
 
             <EditText
                 android:id="@+id/domo_coke_text_quantity"

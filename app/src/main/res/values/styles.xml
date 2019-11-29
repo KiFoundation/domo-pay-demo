@@ -43,12 +43,19 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:orientation">horizontal</item>
         <item name="android:gravity">center</item>
-        <item name="android:padding">@dimen/domo_basic_margin</item>
+        <item name="android:layout_marginStart">@dimen/domo_item_margin_horizontal</item>
+        <item name="android:layout_marginEnd">@dimen/domo_item_margin_horizontal</item>
+    </style>
+
+    <style name="Domo.ItemPicture">
+        <item name="android:layout_width">@dimen/domo_item_picture_width</item>
+        <item name="android:layout_height">@dimen/domo_item_picture_height</item>
+        <item name="android:scaleType">fitCenter</item>
     </style>
 
     <style name="Domo.Text.Product">
         <item name="android:layout_width">0dp</item>
-        <item name="android:layout_weight">5</item>
+        <item name="android:layout_weight">3</item>
         <item name="android:textSize">@dimen/domo_text_main_size</item>
     </style>
 
@@ -66,6 +73,7 @@
         <item name="android:layout_weight">1</item>
         <item name="android:hint">@string/quantity</item>
         <item name="android:inputType">number</item>
+        <item name="android:imeOptions">actionDone</item>
     </style>
 
     <style name="Domo.EditText.Price">
@@ -75,6 +83,7 @@
         <item name="android:gravity">center</item>
         <item name="android:hint">@string/euro</item>
         <item name="android:inputType">numberDecimal</item>
+        <item name="android:imeOptions">actionDone</item>
     </style>
 
 </resources>

@@ -8,6 +8,8 @@
     <dimen name="domo_text_main_size">22sp</dimen>
     <dimen name="domo_text_big_size">25sp</dimen>
 
-    <dimen name="domo_item_maxWidth">300dp</dimen>
+    <dimen name="domo_item_margin_horizontal">32dp</dimen>
+    <dimen name="domo_item_picture_width">100dp</dimen>
+    <dimen name="domo_item_picture_height">70dp</dimen>
 
 </resources>
