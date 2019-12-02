@@ -6,10 +6,16 @@
     <string name="euro">€</string>
     <string name="quantity">Quantity</string>
 
+    <string name="domo_amount_burger">7.5</string>
+    <string name="domo_amount_coke">2.5</string>
+    <string name="domo_amount_fries">2</string>
     <string name="domo_price">%1$s €</string>
     <string name="domo_product_burger">Burger</string>
     <string name="domo_product_coke">Coca</string>
     <string name="domo_product_fries">Frites</string>
+    <string name="domo_quantity_burger">0</string>
+    <string name="domo_quantity_coke">0</string>
+    <string name="domo_quantity_fries">0</string>
     <string name="domo_total">Total : %1$s €</string>
 
 </resources>

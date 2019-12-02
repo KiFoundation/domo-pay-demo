@@ -5,14 +5,11 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.view.KeyEvent
 import android.view.View
-import android.view.inputmethod.EditorInfo
 import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_demo.*
 import java.text.DecimalFormat
 
 
@@ -41,7 +38,7 @@ class DemoActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_demo)
 
         init()
 
@@ -70,79 +67,43 @@ class DemoActivity : AppCompatActivity() {
         supportActionBar?.setHomeButtonEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        // Listenr for action done
-        val doneListener = object : TextView.OnEditorActionListener {
-            override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
-            Log.d(TAG, "OnEditorActionListener id: $actionId")
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    Log.d(TAG, "focus ??")
-                    domo_button_valid.requestFocus()
-
-
-
-                }
-                return false;
-            }
+        val burgersListener = View.OnFocusChangeListener { _, _ ->
+            domo_burger_text_total.text = getString(
+                R.string.domo_price,
+                DEFAULT_DECIMALFORMAT.format(
+                    calculateItemTotal(domo_burger_text_quantity, domo_burger_text_price)
+                )
+            )
+            refreshTotal()
         }
+        domo_burger_text_quantity.onFocusChangeListener = burgersListener
+        domo_burger_text_price.onFocusChangeListener = burgersListener
 
-        val burgersListener = object : View.OnFocusChangeListener {
-            override fun onFocusChange(v: View?, hasFocus: Boolean) {
-                domo_burger_text_total.text = getString(
-                    R.string.domo_price,
-                    DEFAULT_DECIMALFORMAT.format(
-                        calculateItemTotal(
-                            domo_burger_text_quantity,
-                            domo_burger_text_price
-                        )
-                    )
+        val friesListener = View.OnFocusChangeListener { _, _ ->
+            domo_fries_text_total.text = getString(
+                R.string.domo_price,
+                DEFAULT_DECIMALFORMAT.format(
+                    calculateItemTotal(domo_fries_text_quantity, domo_fries_text_price)
                 )
-                domo_text_total.text = getString(
-                    R.string.domo_total, DEFAULT_DECIMALFORMAT.format(calculateTotal())
-                )
-            }
+            )
+            refreshTotal()
         }
-        domo_burger_text_quantity.setOnFocusChangeListener(burgersListener)
-        domo_burger_text_price.setOnFocusChangeListener(burgersListener)
+        domo_fries_text_quantity.onFocusChangeListener = friesListener
+        domo_fries_text_price.onFocusChangeListener = friesListener
 
-        val friesListener = object : View.OnFocusChangeListener {
-            override fun onFocusChange(v: View?, hasFocus: Boolean) {
-                domo_fries_text_total.text = getString(
-                    R.string.domo_price,
-                    DEFAULT_DECIMALFORMAT.format(
-                        calculateItemTotal(
-                            domo_fries_text_quantity,
-                            domo_fries_text_price
-                        )
-                    )
+        val cokesListener = View.OnFocusChangeListener { _, _ ->
+            domo_coke_text_total.text = getString(
+                R.string.domo_price,
+                DEFAULT_DECIMALFORMAT.format(
+                    calculateItemTotal(domo_coke_text_quantity, domo_coke_text_price)
                 )
-                domo_text_total.text = getString(
-                    R.string.domo_total, DEFAULT_DECIMALFORMAT.format(calculateTotal())
-                )
-            }
+            )
+            refreshTotal()
         }
-        domo_fries_text_quantity.setOnFocusChangeListener(friesListener)
-        domo_fries_text_price.setOnFocusChangeListener(friesListener)
+        domo_coke_text_quantity.onFocusChangeListener = cokesListener
+        domo_coke_text_price.onFocusChangeListener = cokesListener
 
-        val cokesListener = object : View.OnFocusChangeListener {
-            override fun onFocusChange(v: View?, hasFocus: Boolean) {
-                domo_coke_text_total.text = getString(
-                    R.string.domo_price,
-                    DEFAULT_DECIMALFORMAT.format(
-                        calculateItemTotal(
-                            domo_coke_text_quantity,
-                            domo_coke_text_price
-                        )
-                    )
-                )
-                domo_text_total.text = getString(
-                    R.string.domo_total, DEFAULT_DECIMALFORMAT.format(calculateTotal())
-                )
-            }
-        }
-        domo_coke_text_quantity.setOnFocusChangeListener(cokesListener)
-        domo_coke_text_price.setOnFocusChangeListener(cokesListener)
-
-        domo_button_valid.setOnClickListener({ validOrder() })
+        domo_button_valid.setOnClickListener { validOrder() }
 
     }
 
@@ -152,12 +113,63 @@ class DemoActivity : AppCompatActivity() {
         val uri = Uri.parse("pay:Toto")
         val intent = Intent("ki.domopay.intent.action.PAY", uri)
         intent.putExtra("description", "Toto")
-        intent.putExtra("amount", calculateTotal().toString())
+        intent.putExtra("amount", (calculateTotal()*100).toString())
         intent.putExtra("currency", "EUR")
         intent.putExtra("clientKey", "heytom-00000")
 
+        createJSonDetails().let {
+            intent.putExtra("details", it)
+        }
+
         startActivityForResult(intent, DOMOPAY_REQUEST_CODE)
 
+    }
+
+    private fun refreshTotal() {
+        domo_text_total.text = getString(
+            R.string.domo_total, DEFAULT_DECIMALFORMAT.format(calculateTotal())
+        )
+    }
+
+    private fun createJSonDetails(): String {
+        val burgersQuantity = extractQuantity(domo_burger_text_quantity)
+        val burgerAmount = extractPrice(domo_burger_text_price)
+        val friesQuantity = extractQuantity(domo_fries_text_quantity)
+        val friesAmount = extractPrice(domo_fries_text_price)
+        val cokesQuantity = extractQuantity(domo_coke_text_quantity)
+        val cokeAmount = extractPrice(domo_coke_text_price)
+        // Open array
+        var finalJson = "["
+        detailJson("burgers", burgersQuantity, burgerAmount)?.let { detailJson ->
+            finalJson += detailJson
+        }
+        detailJson("frites", friesQuantity, friesAmount)?.let { detailJson ->
+            // Check for separator
+            if (finalJson.length > 1) {
+                finalJson += ", "
+            }
+            finalJson += detailJson
+        }
+        detailJson("cocas", cokesQuantity, cokeAmount)?.let { detailJson ->
+            // Check for separator
+            if (finalJson.length > 1) {
+                finalJson += ", "
+            }
+            finalJson += detailJson
+        }
+        // Close array
+        finalJson += "]"
+        return finalJson
+    }
+
+    /**
+     * Create Json for a detail
+     */
+    private fun detailJson(label: String, quantity: Int, amount: Float): String? {
+        if (quantity > 0 && amount > 0) {
+            return "{ \"label\":\"$label\", \"quantity\":\"$quantity\", \"amount\":\"${amount*100}\" }"
+        }
+        return null
     }
 
 
@@ -175,7 +187,7 @@ class DemoActivity : AppCompatActivity() {
     private fun extractQuantity(view: View): Int {
         if (view is EditText) {
             view.text.toString().let {
-                if (!it.isEmpty()) {
+                if (it.isNotEmpty()) {
                     return it.toInt()
                 }
             }
@@ -186,7 +198,7 @@ class DemoActivity : AppCompatActivity() {
     private fun extractPrice(view: View): Float {
         if (view is EditText) {
             view.text.toString().let {
-                if (!it.isEmpty()) {
+                if (it.isNotEmpty()) {
                     return it.toFloat()
                 }
             }

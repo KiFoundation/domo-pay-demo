@@ -47,11 +47,13 @@
 
             <EditText
                 android:id="@+id/domo_burger_text_quantity"
-                style="@style/Domo.EditText.Quantity" />
+                style="@style/Domo.EditText.Quantity"
+                android:text="@string/domo_quantity_burger" />
 
             <EditText
                 android:id="@+id/domo_burger_text_price"
-                style="@style/Domo.EditText.Price" />
+                style="@style/Domo.EditText.Price"
+                android:text="@string/domo_amount_burger" />
 
             <TextView
                 android:id="@+id/domo_burger_text_total"
@@ -78,11 +80,13 @@
 
             <EditText
                 android:id="@+id/domo_fries_text_quantity"
-                style="@style/Domo.EditText.Quantity" />
+                style="@style/Domo.EditText.Quantity"
+                android:text="@string/domo_quantity_fries" />
 
             <EditText
                 android:id="@+id/domo_fries_text_price"
-                style="@style/Domo.EditText.Price" />
+                style="@style/Domo.EditText.Price"
+                android:text="@string/domo_amount_fries" />
 
             <TextView
                 android:id="@+id/domo_fries_text_total"
@@ -109,11 +113,13 @@
 
             <EditText
                 android:id="@+id/domo_coke_text_quantity"
-                style="@style/Domo.EditText.Quantity" />
+                style="@style/Domo.EditText.Quantity"
+                android:text="@string/domo_quantity_coke" />
 
             <EditText
                 android:id="@+id/domo_coke_text_price"
-                style="@style/Domo.EditText.Price" />
+                style="@style/Domo.EditText.Price"
+                android:text="@string/domo_amount_coke" />
 
             <TextView
                 android:id="@+id/domo_coke_text_total"
