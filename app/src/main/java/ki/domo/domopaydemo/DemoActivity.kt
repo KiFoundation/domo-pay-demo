@@ -5,8 +5,11 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.KeyEvent
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
@@ -51,7 +54,7 @@ class DemoActivity : AppCompatActivity() {
             DOMOPAY_REQUEST_CODE -> {
                 when (resultCode) {
                     Activity.RESULT_OK -> {
-                        Toast.makeText(this, "Paiement en cours...", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this, "Paiement réussi !!", Toast.LENGTH_LONG).show()
                     }
                     else -> {
                         Toast.makeText(this, "Paiement annulé...", Toast.LENGTH_LONG).show()
@@ -66,6 +69,21 @@ class DemoActivity : AppCompatActivity() {
         setSupportActionBar(domo_toolbar)
         supportActionBar?.setHomeButtonEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        // Listenr for action done
+        val doneListener = object : TextView.OnEditorActionListener {
+            override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
+            Log.d(TAG, "OnEditorActionListener id: $actionId")
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    Log.d(TAG, "focus ??")
+                    domo_button_valid.requestFocus()
+
+
+
+                }
+                return false;
+            }
+        }
 
         val burgersListener = object : View.OnFocusChangeListener {
             override fun onFocusChange(v: View?, hasFocus: Boolean) {
@@ -130,7 +148,6 @@ class DemoActivity : AppCompatActivity() {
 
 
     private fun validOrder() {
-        // TODO
 
         val uri = Uri.parse("pay:Toto")
         val intent = Intent("ki.domopay.intent.action.PAY", uri)

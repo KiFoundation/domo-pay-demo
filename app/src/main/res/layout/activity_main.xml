@@ -47,13 +47,11 @@
 
             <EditText
                 android:id="@+id/domo_burger_text_quantity"
-                style="@style/Domo.EditText.Quantity"
-                android:imeOptions="actionDone" />
+                style="@style/Domo.EditText.Quantity" />
 
             <EditText
                 android:id="@+id/domo_burger_text_price"
-                style="@style/Domo.EditText.Price"
-                android:imeOptions="actionDone" />
+                style="@style/Domo.EditText.Price" />
 
             <TextView
                 android:id="@+id/domo_burger_text_total"
