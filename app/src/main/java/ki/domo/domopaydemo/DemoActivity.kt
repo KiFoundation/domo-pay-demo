@@ -15,6 +15,8 @@ import java.text.DecimalFormat
 
 /**
  * Example of Activity using Domo Pay solution
+ *
+ * Domo Pay is based on intent and waiting for the resultcode
  */
 class DemoActivity : AppCompatActivity() {
 
@@ -44,18 +46,26 @@ class DemoActivity : AppCompatActivity() {
 
     }
 
+    /**
+     * The status of the payment is tranmit by the requescode/resultcode
+     */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         Log.d(TAG, "onActivityResult $requestCode $resultCode $data")
         when (requestCode) {
             DOMOPAY_REQUEST_CODE -> {
                 when (resultCode) {
+                    // Payment is finished correctly
                     Activity.RESULT_OK -> {
                         Toast.makeText(this, "Paiement réussi !!", Toast.LENGTH_LONG).show()
                     }
                     else -> {
+                        // Activity.RESULT_CANCELED -> The payment has been canceled or is not finished
                         Toast.makeText(this, "Paiement annulé...", Toast.LENGTH_LONG).show()
                     }
+                }
+                intent?.extras?.get("uuid")?.let {
+                    Toast.makeText(this, "Paiement uuid : $it", Toast.LENGTH_LONG).show()
                 }
             }
         }
@@ -67,6 +77,7 @@ class DemoActivity : AppCompatActivity() {
         supportActionBar?.setHomeButtonEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        // Refresh values on focus change on edittext
         val burgersListener = View.OnFocusChangeListener { _, _ ->
             domo_burger_text_total.text = getString(
                 R.string.domo_price,
@@ -110,17 +121,22 @@ class DemoActivity : AppCompatActivity() {
 
     private fun validOrder() {
 
-        val uri = Uri.parse("pay:Toto")
+        // Create intent to start Domo Pay activity
+        val uri = Uri.parse("pay:")
         val intent = Intent("ki.domopay.intent.action.PAY", uri)
+
+        // Payment parameters
         intent.putExtra("description", "Toto")
-        intent.putExtra("amount", (calculateTotal()*100).toString())
+        intent.putExtra("amount", (calculateTotal() * 100).toString())
         intent.putExtra("currency", "EUR")
         intent.putExtra("clientKey", "heytom-00000")
 
+        // If you choose to transmit the bill details you have to creat a JSon like this
         createJSonDetails().let {
             intent.putExtra("details", it)
         }
 
+        // Strating Domo Pay activity
         startActivityForResult(intent, DOMOPAY_REQUEST_CODE)
 
     }
@@ -131,6 +147,9 @@ class DemoActivity : AppCompatActivity() {
         )
     }
 
+    /**
+     * Create the JSon specified for the
+     */
     private fun createJSonDetails(): String {
         val burgersQuantity = extractQuantity(domo_burger_text_quantity)
         val burgerAmount = extractPrice(domo_burger_text_price)
@@ -167,7 +186,7 @@ class DemoActivity : AppCompatActivity() {
      */
     private fun detailJson(label: String, quantity: Int, amount: Float): String? {
         if (quantity > 0 && amount > 0) {
-            return "{ \"label\":\"$label\", \"quantity\":\"$quantity\", \"amount\":\"${amount*100}\" }"
+            return "{ \"label\":\"$label\", \"quantity\":\"$quantity\", \"amount\":\"${amount * 100}\" }"
         }
         return null
     }

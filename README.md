@@ -1,104 +1,106 @@
-# domo-pay-demo
+# Domo-Pay
 
-Domo payment framework documentation
+Domo-Pay allows you to collect payments on your Domo application.
 
+## Overview
 
+Collecting payments on your application consists of creating an object, called a `Charge`, used to track and handle all the states of the payment.
 
+Payment is made in four steps:
 
+- you make a **checkout request**, to create a `Charge`;
 
-1 / Installation
+- you redirect guest-user Domo-Pay interface, to allow him to make the payment;
 
+- you receive a confirmation webhook;
 
-Domo pay application should be installed in order to use this framework.
-Please install it on your device before.
+- you check the payment status and deliver the order.
 
-An apk could be provided if needed.
+## Collect a payment using Domo-App application
 
+Domo-Pay application allows you to collect payments without making any API calls.
+It's very easy to use, it works with a very basic android principle : intent / activity / resultcode
 
-2 / Configuration
+https://developer.android.com/reference/android/app/Activity#StartingActivities
 
+Before starting, verify that Domo-Pay is installed on your device.
 
-In order to secure your payments you should provide clientkey, package name and app signature to the API.
+### 1. Set up Domo-Pay
 
-The client key will be provided by Ki fundation and will be mapped with your package id and app signature.
- 
-You can obtain signature with keytool for example.
+First, you need a Third-Party Developer account. Then, you have to [create a new application](https://manager.domo.ki/my-applications/create).
 
+For security check you should provide packageId and app signature of your app.
+(use keytool for app signature inprint)
 
+You will then have a `clientKey` and a `clientSecret` client. You need this to collect payments.
 
-2 / Intent
+### 2. Starting Domo-Pay activity
 
+To make a **checkout request**, you have to start a Domo-Pay Activity.
 
+So create an intent with tht uri `pay:` and the action `ki.domopay.intent.action.PAY`
 
-Using Domo Payment is very simple.
+For payment info you have to fill the bundle extra with this paramters :
 
-You only need to start an activity with extra parameters and wait for the result.
+-   `clientKey`: Your application client key;
+-   `amount`: Amount intended to be collected by this Charge. A positive integer representing how much to charge, in cents (e.g., 100 cents to charge $1.00).
+-   `currency`: Three-letter ISO currency code, in lowercase. Must be a supported currency (EUR, USD) 
+-   `description` (optional): An arbitrary string which you can attach to a Charge object. It is displayed when in the web interface alongside the charge.
+-  `details` (optional): A json with the detail of order content
 
-Uri format will be "pay:" and action is "ki.domopay.intent.action.PAY"
-
-
-
-3 / Parameters
-
-
-Give bundle extras to your intent :
-
-
-clientKey: Very important for security check. It will be checked will your packagename and app signature to the API.
-amount: Total amount (Be careful in centimes)
-currency: Short code currency
-description: Description of the order
-details (optional): Json with order content
-
-
-4 / Details JSon
+#### Details JSOn
 
 The JSon should be an array of Json object with this parameters :
-label: Name of content
-quantity: Number of unit
-amount: Unit price (in cents)
+- label: Name of content
+- quantity: Number of unit
+- amount: Unit price (in cents)
 
-Example :
+Details JSon example
 
-[{"label":"burgers","amount":"750","quantity":2},{"label":"frites","amount":"200","quantity":1},{"label":"cocas","amount":"250","quantity":1}]
+    [
+	    {"label":"burgers","amount":"750","quantity":2},
+	    {"label":"frites","amount":"200","quantity":1},
+	    {"label":"cocas","amount":"250","quantity":1}
+	]
 
-
-5 / Kotlin code example
-
-Create the intent
-
-val intent = Intent("ki.domopay.intent.action.PAY", Uri.parse("pay:"))
-intent.putExtra("description", "Pay")
-intent.putExtra("amount", "1000")
-intent.putExtra("currency", "EUR")
-intent.putExtra("clientKey", "heytom-00000")
-startActivityForResult(intent, 1)
+**Starting activity Kotlin example**
 
 
-Get the resultcode
-
-override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-	super.onActivityResult(requestCode, resultCode, data)
-	when (requestCode) {
-		1 -> {
-		when (resultCode) {
-			Activity.RESULT_OK -> {
-				Toast.makeText(this, "Paiement réussi !!", Toast.LENGTH_LONG).show()
-			}
-			else -> {
-				Toast.makeText(this, "Paiement annulé...", Toast.LENGTH_LONG).show()
-			}
-		}
-	}
-}
+    val intent = Intent("ki.domopay.intent.action.PAY", Uri.parse("pay:"))
+    intent.putExtra("description", "Pay")
+    intent.putExtra("amount", "1000")
+    intent.putExtra("currency", "EUR")
+    intent.putExtra("clientKey", "heytom-00000")
+    startActivityForResult(intent, 1)
 
 
+### 3. Guest user can make the payment
 
+Domo-Pay will create a checkout-request for you, and redirect guest user to a payment interface.
 
+You have nothing to do here.
 
+### 4. Deliver the order
 
+Once the payment has been made, Domo-Pay will give you the result by the resultcode.
+`RESULT_OK` show that the payment process si a success. In other case `RESULT_CANCELED` or all other value show that the process has been stopped or failed.
 
+In all cases an intent will be tranmit containing the uuid of the `Charge` uuid, , allowing you to check its status on your side. 
 
+**Kotlin Example**
 
-
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            1 -> {
+            when (resultCode) {
+                Activity.RESULT_OK -> {
+                    Toast.makeText(this, "Paiement réussi !!", Toast.LENGTH_LONG).show()
+                }
+                else -> {
+                    Toast.makeText(this, "Paiement annulé...", Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+    }
 
