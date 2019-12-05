@@ -28,7 +28,7 @@ class DemoActivity : AppCompatActivity() {
         private val TAG = DemoActivity::class.java.simpleName
 
 
-        // Foramtting decimal
+        // Formatting decimal
         private var DEFAULT_DECIMALFORMAT = DecimalFormat("#.##")
 
         // Request codes
@@ -41,13 +41,11 @@ class DemoActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_demo)
-
         init()
-
     }
 
     /**
-     * The status of the payment is tranmit by the requescode/resultcode
+     * The status of the payment is transmit by the requestcode/resultcode
      */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -57,15 +55,15 @@ class DemoActivity : AppCompatActivity() {
                 when (resultCode) {
                     // Payment is finished correctly
                     Activity.RESULT_OK -> {
-                        Toast.makeText(this, "Paiement réussi !!", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this, "Payment success !!", Toast.LENGTH_LONG).show()
                     }
                     else -> {
                         // Activity.RESULT_CANCELED -> The payment has been canceled or is not finished
-                        Toast.makeText(this, "Paiement annulé...", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this, "Payment canceled...", Toast.LENGTH_LONG).show()
                     }
                 }
                 intent?.extras?.get("uuid")?.let {
-                    Toast.makeText(this, "Paiement uuid : $it", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, "Charge uuid : $it", Toast.LENGTH_LONG).show()
                 }
             }
         }
@@ -114,11 +112,15 @@ class DemoActivity : AppCompatActivity() {
         domo_coke_text_quantity.onFocusChangeListener = cokesListener
         domo_coke_text_price.onFocusChangeListener = cokesListener
 
+        // Valid order on button's click
         domo_button_valid.setOnClickListener { validOrder() }
 
     }
 
 
+    /**
+     * Valid order -> start Domo-Pay activity
+     */
     private fun validOrder() {
 
         // Create intent to start Domo Pay activity
@@ -126,17 +128,17 @@ class DemoActivity : AppCompatActivity() {
         val intent = Intent("ki.domopay.intent.action.PAY", uri)
 
         // Payment parameters
-        intent.putExtra("description", "Toto")
+        intent.putExtra("description", "My food!")
         intent.putExtra("amount", (calculateTotal() * 100).toString())
         intent.putExtra("currency", "EUR")
-        intent.putExtra("clientKey", "heytom-00000")
+        intent.putExtra("clientKey", "YOUR_CLIENT_KEY_HERE")
 
-        // If you choose to transmit the bill details you have to creat a JSon like this
+        // If you choose to transmit the details you have to create a JSON like this
         createJSonDetails().let {
             intent.putExtra("details", it)
         }
 
-        // Strating Domo Pay activity
+        // Starting Domo Pay activity
         startActivityForResult(intent, DOMOPAY_REQUEST_CODE)
 
     }
@@ -148,7 +150,7 @@ class DemoActivity : AppCompatActivity() {
     }
 
     /**
-     * Create the JSon specified for the
+     * Create the JSON specified for the details
      */
     private fun createJSonDetails(): String {
         val burgersQuantity = extractQuantity(domo_burger_text_quantity)
@@ -162,14 +164,14 @@ class DemoActivity : AppCompatActivity() {
         detailJson("burgers", burgersQuantity, burgerAmount)?.let { detailJson ->
             finalJson += detailJson
         }
-        detailJson("frites", friesQuantity, friesAmount)?.let { detailJson ->
+        detailJson("fries", friesQuantity, friesAmount)?.let { detailJson ->
             // Check for separator
             if (finalJson.length > 1) {
                 finalJson += ", "
             }
             finalJson += detailJson
         }
-        detailJson("cocas", cokesQuantity, cokeAmount)?.let { detailJson ->
+        detailJson("cokes", cokesQuantity, cokeAmount)?.let { detailJson ->
             // Check for separator
             if (finalJson.length > 1) {
                 finalJson += ", "
