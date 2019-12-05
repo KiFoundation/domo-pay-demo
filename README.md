@@ -38,7 +38,7 @@ You will then have a `clientKey` and a `clientSecret` client. You need this to c
 
 To make a **checkout request**, you have to start a Domo-Pay Activity.
 
-So create an intent with tht uri `pay:` and the action `ki.domopay.intent.action.PAY`
+So create an intent with the uri `pay:` and the action `ki.domopay.intent.action.PAY`
 
 For payment info you have to fill the bundle extras with this paramters :
 
@@ -46,33 +46,30 @@ For payment info you have to fill the bundle extras with this paramters :
 -   `amount`: Amount intended to be collected by this Charge. A positive integer representing how much to charge, in cents (e.g., 100 cents to charge $1.00).
 -   `currency`: Three-letter ISO currency code, in lowercase. Must be a supported currency (EUR, USD) 
 -   `description` (optional): An arbitrary string which you can attach to a Charge object. It is displayed when in the web interface alongside the charge.
--  `details` (optional): A json with the detail of order content
+-  `details` (optional): A JSON array with the detail of order content. Each row have to contains:
+	- `label`: Name of content
+	- `quantity`: Number of unit
+	- `amount`: Unit price (in cents)
 
-#### Details JSOn
-
-The JSon should be an array of Json object with this parameters :
-- `label`: Name of content
-- `quantity`: Number of unit
-- `amount`: Unit price (in cents)
-
-Details JSon example
-
+Details JSON example
+```
     [
 	    {"label":"burgers","amount":"750","quantity":2},
 	    {"label":"frites","amount":"200","quantity":1},
 	    {"label":"cocas","amount":"250","quantity":1}
 	]
+```
 
 **Starting activity Kotlin example**
 
-
+```
     val intent = Intent("ki.domopay.intent.action.PAY", Uri.parse("pay:"))
     intent.putExtra("description", "Pay")
     intent.putExtra("amount", "1000")
     intent.putExtra("currency", "EUR")
     intent.putExtra("clientKey", "heytom-00000")
     startActivityForResult(intent, 1)
-
+```
 
 ### 3. Guest user can make the payment
 
@@ -85,23 +82,24 @@ You have nothing to do here.
 Once the payment has been made, Domo-Pay will give you the result by the resultcode.
 `RESULT_OK` show that the payment process si a success. In other case `RESULT_CANCELED` or all other value show that the process has been stopped or failed.
 
-In all cases an intent will be tranmit containing the uuid of the `Charge` uuid, , allowing you to check its status on your side. 
+In all cases an intent will be transmit containing the `Charge` uuid, allowing you to check its status on your side.
+The uuid could be extract in the result intent with extra name `uuid`
 If you did not get any intent and uuid, so the payment is failed before or during the **checkout request**
 
 **Kotlin Example**
-
+```
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
             1 -> {
             when (resultCode) {
                 Activity.RESULT_OK -> {
-                    Toast.makeText(this, "Paiement réussi !!", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, "Payment done !!", Toast.LENGTH_LONG).show()
                 }
                 else -> {
-                    Toast.makeText(this, "Paiement annulé...", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, "Payment canceled...", Toast.LENGTH_LONG).show()
                 }
             }
         }
     }
-
+```
