@@ -40,7 +40,7 @@ To make a **checkout request**, you have to start a Domo-Pay Activity.
 
 So create an intent with tht uri `pay:` and the action `ki.domopay.intent.action.PAY`
 
-For payment info you have to fill the bundle extra with this paramters :
+For payment info you have to fill the bundle extras with this paramters :
 
 -   `clientKey`: Your application client key;
 -   `amount`: Amount intended to be collected by this Charge. A positive integer representing how much to charge, in cents (e.g., 100 cents to charge $1.00).
@@ -51,9 +51,9 @@ For payment info you have to fill the bundle extra with this paramters :
 #### Details JSOn
 
 The JSon should be an array of Json object with this parameters :
-- label: Name of content
-- quantity: Number of unit
-- amount: Unit price (in cents)
+- `label`: Name of content
+- `quantity`: Number of unit
+- `amount`: Unit price (in cents)
 
 Details JSon example
 
@@ -86,6 +86,7 @@ Once the payment has been made, Domo-Pay will give you the result by the resultc
 `RESULT_OK` show that the payment process si a success. In other case `RESULT_CANCELED` or all other value show that the process has been stopped or failed.
 
 In all cases an intent will be tranmit containing the uuid of the `Charge` uuid, , allowing you to check its status on your side. 
+If you did not get any intent and uuid, so the payment is failed before or during the **checkout request**
 
 **Kotlin Example**
 
