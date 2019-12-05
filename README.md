@@ -53,22 +53,22 @@ For payment info you have to fill the bundle extras with this paramters :
 
 Details JSON example
 ```
-    [
-	    {"label":"burgers","amount":"750","quantity":2},
-	    {"label":"frites","amount":"200","quantity":1},
-	    {"label":"cocas","amount":"250","quantity":1}
-	]
+[
+	{"label":"burgers","amount":"750","quantity":2},
+	{"label":"frites","amount":"200","quantity":1},
+	{"label":"cocas","amount":"250","quantity":1}
+]
 ```
 
 **Starting activity Kotlin example**
 
 ```
-    val intent = Intent("ki.domopay.intent.action.PAY", Uri.parse("pay:"))
-    intent.putExtra("description", "Pay")
-    intent.putExtra("amount", "1000")
-    intent.putExtra("currency", "EUR")
-    intent.putExtra("clientKey", "heytom-00000")
-    startActivityForResult(intent, 1)
+val intent = Intent("ki.domopay.intent.action.PAY", Uri.parse("pay:"))
+intent.putExtra("description", "Pay")
+intent.putExtra("amount", "1000")
+intent.putExtra("currency", "EUR")
+intent.putExtra("clientKey", "heytom-00000")
+startActivityForResult(intent, 1)
 ```
 
 ### 3. Guest user can make the payment
@@ -88,18 +88,19 @@ If you did not get any intent and uuid, so the payment is failed before or durin
 
 **Kotlin Example**
 ```
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        when (requestCode) {
-            1 -> {
-            when (resultCode) {
-                Activity.RESULT_OK -> {
-                    Toast.makeText(this, "Payment done !!", Toast.LENGTH_LONG).show()
-                }
-                else -> {
-                    Toast.makeText(this, "Payment canceled...", Toast.LENGTH_LONG).show()
-                }
-            }
-        }
-    }
+override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+	super.onActivityResult(requestCode, resultCode, data)
+	when (requestCode) {
+		1 -> {
+			when (resultCode) {
+				Activity.RESULT_OK -> {
+					Toast.makeText(this, "Payment done !!", Toast.LENGTH_LONG).show()
+				}
+				else -> {
+					Toast.makeText(this, "Payment canceled...", Toast.LENGTH_LONG).show()
+				}
+			}
+		}
+	}
+}
 ```
