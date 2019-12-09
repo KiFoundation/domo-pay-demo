@@ -29,9 +29,6 @@ Before starting, verify that Domo-Pay is installed on your device.
 
 First, you need a Third-Party Developer account. Then, you have to [create a new application](https://manager.domo.ki/my-applications/create).
 
-For security check you should provide packageId and app signature of your app.
-(use keytool for app signature inprint)
-
 You will then have a `clientKey` and a `clientSecret` client. You need this to collect payments.
 
 ### 2. Starting Domo-Pay activity
@@ -67,7 +64,7 @@ val intent = Intent("ki.domopay.intent.action.PAY", Uri.parse("pay:"))
 intent.putExtra("description", "Pay")
 intent.putExtra("amount", "1000")
 intent.putExtra("currency", "EUR")
-intent.putExtra("clientKey", "heytom-00000")
+intent.putExtra("clientKey", "YOUR_CLIENT_KEY_HERE")
 startActivityForResult(intent, 1)
 ```
 

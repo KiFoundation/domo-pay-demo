@@ -1,18 +1,20 @@
 <resources>
+
     <string name="app_name">Demo Domo Pay</string>
 
-    <string name="action_valid">Valider</string>
+    <string name="action_valid">Order</string>
 
-    <string name="euro">€</string>
+    <string name="euro" translatable="false">€</string>
     <string name="quantity">Quantity</string>
 
-    <string name="domo_amount_burger">7.5</string>
-    <string name="domo_amount_coke">2.5</string>
-    <string name="domo_amount_fries">2</string>
+    <string name="domo_amount_burger" translatable="false">7.5</string>
+    <string name="domo_amount_coke"  translatable="false">2.5</string>
+    <string name="domo_amount_fries"  translatable="false">2</string>
+
     <string name="domo_price">%1$s €</string>
     <string name="domo_product_burger">Burger</string>
-    <string name="domo_product_coke">Coca</string>
-    <string name="domo_product_fries">Frites</string>
+    <string name="domo_product_coke">Cokes</string>
+    <string name="domo_product_fries">Fries</string>
     <string name="domo_quantity_burger"></string>
     <string name="domo_quantity_coke"></string>
     <string name="domo_quantity_fries"></string>
