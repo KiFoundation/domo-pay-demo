@@ -4,13 +4,13 @@ Domo-Pay allows you to collect payments on your Domo application.
 
 ## Overview
 
-Collecting payments on your application consists of creating an object, called a `Charge`, used to track and handle all the states of the payment.
+Collecting payments on your application consists of creating an object, called a `Charge`, used to track and handle all the states of the payment process.
 
-Payment is made in four steps:
+Payment is made in four specific steps:
 
 - you make a **checkout request**, to create a `Charge`;
 
-- you redirect guest-user Domo-Pay interface, to allow him to make the payment;
+- you redirect guest-user on the Domo-Pay interface, to allow him to make the payment;
 
 - you receive a confirmation webhook;
 
@@ -70,7 +70,7 @@ startActivityForResult(intent, 1)
 
 ### 3. Guest user can make the payment
 
-Domo-Pay will create a checkout-request for you, and redirect guest user to a payment interface.
+Domo-Pay will create a checkout-request for you, and redirect the guest user to a payment interface.
 
 You have nothing to do here.
 
