@@ -28,6 +28,16 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
+        <!-- Prevent for having focus on edittext by default (prevent open IME) -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
+
+            <requestFocus />
+        </View>
+
         <!-- Burgers -->
         <LinearLayout
             android:id="@+id/domo_layout_burger"
@@ -146,6 +156,17 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/domo_text_total" />
+
+        <TextView
+            android:id="@+id/domo_text_address"
+            style="@style/Domo.Text"
+            android:text="@string/domo_address_unknown"
+            android:textSize="@dimen/domo_text_main_size"
+            android:padding="@dimen/domo_basic_margin"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/domo_button_valid" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

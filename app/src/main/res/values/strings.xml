@@ -14,6 +14,8 @@
     <string name="domo_quantity_coke" translatable="false">1</string>
     <string name="domo_quantity_fries" translatable="false">1</string>
 
+    <string name="domo_address">Address: %1$s</string>
+    <string name="domo_address_unknown">Address: -</string>
     <string name="domo_price">%1$s €</string>
     <string name="domo_product_burger">Burger</string>
     <string name="domo_product_coke">Cokes</string>

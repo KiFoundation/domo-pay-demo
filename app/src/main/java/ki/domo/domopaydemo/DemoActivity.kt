@@ -10,6 +10,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_demo.*
+import org.json.JSONObject
 import java.text.DecimalFormat
 
 
@@ -34,7 +35,6 @@ class DemoActivity : AppCompatActivity() {
         // Request codes
         private const val DOMOPAY_REQUEST_CODE = 1
 
-
     }
 
 
@@ -42,6 +42,11 @@ class DemoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_demo)
         init()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        refreshTotal()
     }
 
     /**
@@ -114,6 +119,11 @@ class DemoActivity : AppCompatActivity() {
 
         // Valid order on button's click
         domo_button_valid.setOnClickListener { validOrder() }
+
+        // Extract extras data from "DomoConnect"
+        intent?.extras?.let {
+            extractDomoInfos(it.getString("domo_connect"))
+        }
 
     }
 
@@ -191,6 +201,21 @@ class DemoActivity : AppCompatActivity() {
             return "{ \"label\":\"$label\", \"quantity\":\"$quantity\", \"amount\":\"${amount * 100}\" }"
         }
         return null
+    }
+
+    /**
+     * Parse JSon and extract address
+     */
+    private fun extractDomoInfos(json: String?) {
+        json?.let {
+            val unit = JSONObject(json).getJSONObject("unit")
+            unit.let {
+                val address = it.getString("address")
+                val zipcode = it.getString("city")
+                val city = it.getString("city")
+                domo_text_address.text = getString(R.string.domo_address, "$address, $zipcode $city")
+            }
+        }
     }
 
 

@@ -6,6 +6,8 @@
 
     <string name="quantity">Quantité</string>
 
+    <string name="domo_address">Addresse de livraison : %1$s</string>
+    <string name="domo_address_unknown">Addresse de livraison inconnue</string>
     <string name="domo_price">%1$s €</string>
     <string name="domo_product_burger">Burger</string>
     <string name="domo_product_coke">Cocas</string>
