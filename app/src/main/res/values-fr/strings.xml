@@ -10,9 +10,6 @@
     <string name="domo_product_burger">Burger</string>
     <string name="domo_product_coke">Cocas</string>
     <string name="domo_product_fries">Frites</string>
-    <string name="domo_quantity_burger"></string>
-    <string name="domo_quantity_coke"></string>
-    <string name="domo_quantity_fries"></string>
     <string name="domo_total">Total : %1$s €</string>
 
 </resources>
