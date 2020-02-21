@@ -1,7 +1,7 @@
 package ki.domo.domopaydemo
 
 import android.app.Activity
-import android.content.Intent
+import android.content.*
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -29,6 +29,10 @@ class DemoActivity : AppCompatActivity() {
         private val TAG = DemoActivity::class.java.simpleName
 
 
+        // Client key provided by "Domo"
+        private const val DOMO_CLIENTKEY = "<YOUR_DOMO_CLIENT_KEY_HERE>"
+
+
         // Formatting decimal
         private var DEFAULT_DECIMALFORMAT = DecimalFormat("#.##")
 
@@ -38,15 +42,27 @@ class DemoActivity : AppCompatActivity() {
     }
 
 
+    // Broadcast receiver for Domo connect
+    private var receiver = DomoConnectReceiver()
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_demo)
         init()
+        registerReceiver(
+            receiver, IntentFilter("ki.domoconnect.intent.action.DOMOCONNECT_RESPONSE")
+        )
     }
 
     override fun onResume() {
         super.onResume()
         refreshTotal()
+    }
+
+    override fun onDestroy() {
+        unregisterReceiver(receiver)
+        super.onDestroy()
     }
 
     /**
@@ -123,7 +139,12 @@ class DemoActivity : AppCompatActivity() {
         // Extract extras data from "DomoConnect"
         intent?.extras?.let {
             extractDomoInfos(it.getString("domo_connect"))
+        } ?: let {
+            Log.d(TAG, "sendBroadcast")
+            sendDomoConnectBroadcast()
+
         }
+
 
     }
 
@@ -141,7 +162,7 @@ class DemoActivity : AppCompatActivity() {
         intent.putExtra("description", "My food!")
         intent.putExtra("amount", (calculateTotal() * 100).toString())
         intent.putExtra("currency", "EUR")
-        intent.putExtra("clientKey", "YOUR_CLIENT_KEY_HERE")
+        intent.putExtra("clientKey", DOMO_CLIENTKEY)
 
         // If you choose to transmit the details you have to create a JSON like this
         createJSonDetails().let {
@@ -157,6 +178,29 @@ class DemoActivity : AppCompatActivity() {
         domo_text_total.text = getString(
             R.string.domo_total, DEFAULT_DECIMALFORMAT.format(calculateTotal())
         )
+    }
+
+    /**
+     * Construct intent for Domo broadcast
+     */
+    private fun sendDomoConnectBroadcast() {
+        // Create intent with Domo action
+        val intent = Intent("ki.domoconnect.intent.action.DOMOCONNECT_REQUEST").also {
+            // Nedded for Domo security ?
+            it.putExtra("ki.domoconnect.intent.extra.CLIENTKEY", DOMO_CLIENTKEY)
+            // Needed for Android >= 8
+            it.component = ComponentName(
+                "ki.domo.domolauncher", "ki.domo.domolauncher.receiver.DomoConnectReceiver"
+            )
+            // Needed if your Broadcast is declared in the MANIFEST
+//            it.putExtra("ki.domoconnect.intent.extra.PACKAGENAME", packageName)
+//            it.putExtra(
+//                "ki.domoconnect.intent.extra.COMPONENT",
+//                "ki.domo.domopaydemo.DemoActivity\$DomoConnectReceiver"
+//            )
+        }
+        // Send broadcast to Domo
+        sendBroadcast(intent)
     }
 
     /**
@@ -213,7 +257,8 @@ class DemoActivity : AppCompatActivity() {
                 val address = it.getString("address")
                 val zipcode = it.getString("city")
                 val city = it.getString("city")
-                domo_text_address.text = getString(R.string.domo_address, "$address, $zipcode $city")
+                domo_text_address.text =
+                    getString(R.string.domo_address, "$address, $zipcode $city")
             }
         }
     }
@@ -254,6 +299,36 @@ class DemoActivity : AppCompatActivity() {
 
     private fun calculateItemTotal(quantityView: View, priceView: View): Float {
         return extractQuantity(quantityView) * extractPrice(priceView)
+    }
+
+
+    /**
+     * Domo connect receiver
+     */
+    inner class DomoConnectReceiver : BroadcastReceiver() {
+
+        override fun onReceive(context: Context, intent: Intent) {
+            Log.d(TAG, "onReceive $intent")
+            // Check domo action
+            intent.action?.let {
+                if (it == "ki.domoconnect.intent.action.DOMOCONNECT_RESPONSE") {
+                    // Extract data
+                    val json = intent.getStringExtra("ki.domoconnect.intent.extra.DOMO_CONNECT")
+                    val error = intent.getStringExtra("ki.domoconnect.intent.extra.ERROR")
+
+                    Log.d(TAG, "Domo connect json: $json")
+                    // Check json
+                    json?.let {
+                        extractDomoInfos(it)
+                    }
+                    // Check error
+                    error?.let {
+                        Toast.makeText(this@DemoActivity, error, Toast.LENGTH_LONG).show()
+
+                    }
+                }
+            }
+        }
     }
 
 }
