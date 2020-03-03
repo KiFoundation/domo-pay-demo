@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_demo.*
 import org.json.JSONObject
 import java.text.DecimalFormat
+import java.util.*
 
 
 /**
@@ -76,15 +77,28 @@ class DemoActivity : AppCompatActivity() {
                 when (resultCode) {
                     // Payment is finished correctly
                     Activity.RESULT_OK -> {
+                        Log.d(TAG, "Payment success !!")
                         Toast.makeText(this, "Payment success !!", Toast.LENGTH_LONG).show()
                     }
                     else -> {
+                        Log.d(TAG, "Payment canceled...")
                         // Activity.RESULT_CANCELED -> The payment has been canceled or is not finished
                         Toast.makeText(this, "Payment canceled...", Toast.LENGTH_LONG).show()
                     }
                 }
-                intent?.extras?.get("uuid")?.let {
-                    Toast.makeText(this, "Charge uuid : $it", Toast.LENGTH_LONG).show()
+                data?.extras?.let { extras ->
+                    extras.get("uuid")?.let {
+                        Log.d(TAG, "Charge uuid : $it")
+                        Toast.makeText(this, "Charge uuid : $it", Toast.LENGTH_LONG).show()
+                    }
+                    extras.get("externalOrderID")?.let {
+                        Log.d(TAG, "Demo order uuid : $it")
+                        Toast.makeText(this, "Demo order uuid : $it", Toast.LENGTH_LONG).show()
+                    }
+                    extras.get("domo_connect")?.let {
+                        Log.d(TAG, "Demo connect ! json: $it")
+                        Toast.makeText(this, "Demo connect ! json: $it", Toast.LENGTH_LONG).show()
+                    }
                 }
             }
         }
@@ -137,8 +151,11 @@ class DemoActivity : AppCompatActivity() {
         domo_button_valid.setOnClickListener { validOrder() }
 
         // Extract extras data from "DomoConnect"
-        intent?.extras?.let {
-            extractDomoInfos(it.getString("domo_connect"))
+        intent?.extras?.let { extras ->
+            extras.getString("domo_connect")?.let { json ->
+                Log.d(TAG, "domo_connect json: $json")
+                extractDomoInfos(json)
+            }
         } ?: let {
             Log.d(TAG, "sendBroadcast")
             sendDomoConnectBroadcast()
@@ -163,6 +180,7 @@ class DemoActivity : AppCompatActivity() {
         intent.putExtra("amount", (calculateTotal() * 100).toString())
         intent.putExtra("currency", "EUR")
         intent.putExtra("clientKey", DOMO_CLIENTKEY)
+        intent.putExtra("externalOrderID", UUID.randomUUID().toString())
 
         // If you choose to transmit the details you have to create a JSON like this
         createJSonDetails().let {
@@ -310,12 +328,11 @@ class DemoActivity : AppCompatActivity() {
         override fun onReceive(context: Context, intent: Intent) {
             Log.d(TAG, "onReceive $intent")
             // Check domo action
-            intent.action?.let {
-                if (it == "ki.domoconnect.intent.action.DOMOCONNECT_RESPONSE") {
+            intent.action?.let {action ->
+                if (action == "ki.domoconnect.intent.action.DOMOCONNECT_RESPONSE") {
                     // Extract data
                     val json = intent.getStringExtra("ki.domoconnect.intent.extra.DOMO_CONNECT")
                     val error = intent.getStringExtra("ki.domoconnect.intent.extra.ERROR")
-
                     Log.d(TAG, "Domo connect json: $json")
                     // Check json
                     json?.let {
@@ -324,7 +341,6 @@ class DemoActivity : AppCompatActivity() {
                     // Check error
                     error?.let {
                         Toast.makeText(this@DemoActivity, error, Toast.LENGTH_LONG).show()
-
                     }
                 }
             }
